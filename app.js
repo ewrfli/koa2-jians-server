@@ -6,6 +6,7 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const MongoConnect = require('./db')
+const cors = require('koa2-cors')
 //连接数据库
 MongoConnect()
 
@@ -34,6 +35,8 @@ app.use(async (ctx, next) => {
   const ms = new Date() - start
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
+
+app.use(cors())
 
 // routes
 app.use(index.routes(), index.allowedMethods())
