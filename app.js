@@ -7,6 +7,7 @@ const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const MongoConnect = require('./db')
 const cors = require('koa2-cors')
+const koajwt = require('koa-jwt')
 //连接数据库
 MongoConnect()
 
@@ -35,6 +36,12 @@ app.use(async (ctx, next) => {
   const ms = new Date() - start
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
+
+app.use(koajwt({
+  secret: 'jianshu-server-jwt'
+}).unless({
+  path:[/^\/users\/login/]
+}))
 
 app.use(cors())
 
