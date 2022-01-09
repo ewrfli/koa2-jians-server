@@ -13,7 +13,8 @@ MongoConnect()
 
 const index = require('./routes/index')
 // const users = require('./routes/users')
-const { unprotectedRouter, protectedRouter } = require('./routes/users')
+const { unprotectedRouter, protectedUserRouter } = require('./routes/users')
+const protectedUploadRouter = require('./routes/upload')
 
 // error handler
 onerror(app)
@@ -48,11 +49,13 @@ app.use(cors())
 
 // routes
 app.use(unprotectedRouter.routes(), unprotectedRouter.allowedMethods())
+app.use(protectedUploadRouter.routes(), protectedUploadRouter.allowedMethods())//文件上传
 // 注册 JWT 中间件 
 app.use(koajwt({ secret: 'jianshu-server-jwt' }));//.unless({ method: 'GET' })
 //受jwk保护的放后面
 // app.use(index.routes(), index.allowedMethods())
-app.use(protectedRouter.routes(), protectedRouter.allowedMethods())
+app.use(protectedUserRouter.routes(), protectedUserRouter.allowedMethods())
+
 
 // error-handling
 app.on('error', (err, ctx) => {

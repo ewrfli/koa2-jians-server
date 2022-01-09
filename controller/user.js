@@ -70,7 +70,7 @@ const userDel = async (ctx, next) => {
     await crud.Del(modelsUsers.Users, null, { _id },ctx)
 };
 
-// 修改用户
+// 修改用户名密码
 const userUpdate = async (ctx, next) => {
     let params = ctx.request.body; //{ _id: '61d9bba7b3217726997ba1c0', username: 'xxxcccs', pwd: '12341' }
     console.log('userUpdate,params',params)

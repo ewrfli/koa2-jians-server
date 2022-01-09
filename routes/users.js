@@ -9,23 +9,23 @@ unprotectedRouter.post("/register", userCtl.userRegister);
 
 
 
-const protectedRouter = new Router({ //有保护的
+const protectedUserRouter = new Router({ //有保护的
     prefix: '/users'
 });
 
-protectedRouter.post("/verify", userCtl.verify);
+protectedUserRouter.post("/verify", userCtl.verify);
 
-protectedRouter.post("/add", userCtl.userAdd);
+protectedUserRouter.post("/add", userCtl.userAdd);
 
-protectedRouter.delete("/del", userCtl.userDel);
+protectedUserRouter.delete("/del", userCtl.userDel);
 
-protectedRouter.put("/update", userCtl.userUpdate);
+protectedUserRouter.put("/update", userCtl.userUpdate); //修改用户名密码
 
-protectedRouter.get("/findall", userCtl.userFindAll);
+protectedUserRouter.get("/findall", userCtl.userFindAll);
 
 // router.get("/find/:id", userCtl.userFindOne);//动态路由
 
-protectedRouter.get("/find", userCtl.userFindOne);//post query参数传值
+protectedUserRouter.get("/find", userCtl.userFindOne);//post query参数传值
 
 
-module.exports = { unprotectedRouter, protectedRouter };
+module.exports = { unprotectedRouter, protectedUserRouter };
