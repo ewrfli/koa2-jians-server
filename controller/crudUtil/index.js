@@ -4,7 +4,7 @@ const Login = (model, params, ctx) => (
     model.findOne(params)//
         .then((rel) => {
             if (rel) { //有rel代表数据库找到此用户
-                let token = jwt.sign({
+                let token = jwt.sign({  //签发token 下次请求中附带在Authorization:Bearer ...Jwt...
                     username: rel.username,
                     _id: rel._id
                 },'jianshu-server-jwt',{

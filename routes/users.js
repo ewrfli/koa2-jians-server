@@ -1,17 +1,20 @@
-// const Router = require("koa-router")();
 const Router = require("@koa/router")
 const userCtl = require("../controller/user");
-// Router.prefix("/users");
-const router = new Router({
-    prefix: '/users'
-  });
-  
-const unprotectedRouter = new Router(); //unprotected无保护的
-unprotectedRouter.post("/login", userCtl.userLogin);
 
+const unprotectedRouter = new Router({  //unprotected无保护的
+    prefix: '/users'
+});
+unprotectedRouter.post("/login", userCtl.userLogin);
 unprotectedRouter.post("/register", userCtl.userRegister);
 
-const protectedRouter = new Router();//有保护的
+
+
+const protectedRouter = new Router({ //有保护的
+    prefix: '/users'
+});
+
+protectedRouter.post("/verify", userCtl.verify);
+
 protectedRouter.post("/add", userCtl.userAdd);
 
 protectedRouter.delete("/del", userCtl.userDel);
@@ -25,4 +28,4 @@ protectedRouter.get("/findall", userCtl.userFindAll);
 protectedRouter.get("/find", userCtl.userFindOne);//post query参数传值
 
 
-module.exports = router;
+module.exports = { unprotectedRouter, protectedRouter };

@@ -12,7 +12,8 @@ const koajwt = require('koa-jwt')
 MongoConnect()
 
 const index = require('./routes/index')
-const users = require('./routes/users')
+// const users = require('./routes/users')
+const { unprotectedRouter, protectedRouter } = require('./routes/users')
 
 // error handler
 onerror(app)
@@ -37,17 +38,21 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
-app.use(koajwt({
-  secret: 'jianshu-server-jwt'
-}).unless({
-  path:[/^\/users\/login/]
-}))
+// app.use(koajwt({
+//   secret: 'jianshu-server-jwt'
+// }).unless({
+//   path:[/^\/users\/login/]
+// }))
 
 app.use(cors())
 
 // routes
-app.use(index.routes(), index.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
+app.use(unprotectedRouter.routes(), unprotectedRouter.allowedMethods())
+// 注册 JWT 中间件 
+app.use(koajwt({ secret: 'jianshu-server-jwt' }).unless({ method: 'GET' }));
+//受jwk保护的放后面
+// app.use(index.routes(), index.allowedMethods())
+app.use(protectedRouter.routes(), protectedRouter.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

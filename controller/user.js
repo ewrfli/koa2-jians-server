@@ -3,14 +3,41 @@ const modelsUsers = require('../models/users');
 const crud = require('./crudUtil/index')
 const jwt = require('jsonwebtoken')
 
-//register
+// 验证用户登录
+const verify = async (ctx) => {
+    let token = ctx.header.authorization //签发token 下次请求中附带在Authorization:Bearer ...Jwt...
+    token = token.replace('Bearer ','')
+    try {
+        let result = jwt.verify(token, 'jianshu-server-jwt')
+        await modelsUsers.Users.findOne({_id: result._id}).then(rel=>{
+            if(rel){
+                ctx.body = {
+                    code: 200,
+                    msg: "认证成功",
+                    user: rel
+                };
+            }else {
+                ctx.body = {
+                    code: 500,
+                    msg: "认证失败",
+                };
+            }
+        })
+    } catch (err) {
+        ctx.body = {
+            code: 500,
+            msg: "认证失败",
+        };
+    }
+};
 
+//登录
 const userLogin = async (ctx) => {
     let { username = "", pwd = "" } = ctx.request.body;
 
     await crud.Login(modelsUsers.Users, { username, pwd } ,ctx)
 };
-
+//register
 const userRegister = async (ctx) => {
     let isDouble = false
     // console.log('userRegister', ctx.request.body) { username: 'adc', pwd: '1234' }
@@ -28,7 +55,10 @@ const userRegister = async (ctx) => {
 
     await crud.Add(modelsUsers.Users, ctx.request.body, ctx)
 };
+// 修改密码
 
+
+//添加用户
 const userAdd = async (ctx) => {
     let { username = "", pwd = "" } = ctx.request.body;
     await crud.Add(modelsUsers.Users, { username, pwd }, ctx)
@@ -77,6 +107,7 @@ const userFindOne = async (ctx, next) => {
 };
 
 module.exports = {
+    verify,
     userLogin,
     userRegister,
     userAdd,
