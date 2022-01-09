@@ -2,6 +2,10 @@ const router = require("koa-router")();
 const userCtl = require("../controller/user");
 router.prefix("/users");
 
+router.post("/login", userCtl.userLogin);
+
+router.post("/register", userCtl.userRegister);
+
 router.post("/add", userCtl.userAdd);
 
 router.delete("/del", userCtl.userDel);

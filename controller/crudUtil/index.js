@@ -1,3 +1,38 @@
+const jwt = require('jsonwebtoken')
+const Login = (model, params, ctx) => (
+    // console.log('params',params)
+    model.findOne(params)//
+        .then((rel) => {
+            if (rel) { //有rel代表数据库找到此用户
+                let token = jwt.sign({
+                    username: rel.username,
+                    _id: rel._id
+                },'jianshu-server-jwt',{
+                    expiresIn: 3600*24*7
+                })
+
+                ctx.body = {
+                    code: 200,
+                    msg: "登录成功",
+                    reslut: rel, 
+                    token
+                };
+            } else {
+                ctx.body = {
+                    code: 300,
+                    msg: "登录失败",
+                };
+            }
+        })
+        .catch((err) => {
+            ctx.body = {
+                code: 400,
+                msg: "登录异常",
+            };
+            console.error(err);
+        })
+)
+
 /**
  * 
  * @param {*} model 
@@ -136,18 +171,19 @@ const Find = (model, where, ctx) => (
  * @returns 
  */
 const FindOne = (model, params, ctx) => (
-    model.findOne({ _id: params._id })//
+    model.findOne(params)//
         .then((rel) => {
             if (rel) {
+
                 ctx.body = {
                     code: 200,
-                    msg: "成功",
-                    reslut: rel, //返回删除对象
+                    msg: "查询成功",
+                    reslut: rel, //返回对象
                 };
             } else {
                 ctx.body = {
                     code: 300,
-                    msg: "失败",
+                    msg: "查询失败",
                 };
             }
         })
@@ -161,6 +197,7 @@ const FindOne = (model, params, ctx) => (
 )
 
 module.exports = {
+    Login,
     Add,
     Del,
     Update,
