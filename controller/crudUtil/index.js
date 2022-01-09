@@ -135,8 +135,8 @@ const Find = (model, where, ctx) => (
  * @param {*} ctx 
  * @returns 
  */
-const FindOne = (model, where, params, ctx) => (
-    model.findOne({ _id: ctx.params.id })//
+const FindOne = (model, params, ctx) => (
+    model.findOne({ _id: params._id })//
         .then((rel) => {
             if (rel) {
                 ctx.body = {
