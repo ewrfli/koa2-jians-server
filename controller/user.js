@@ -8,7 +8,7 @@ const verify = async (ctx) => {
     let token = ctx.header.authorization //签发token 下次请求中附带在Authorization:Bearer ...Jwt...
     token = token.replace('Bearer ','')
     try {
-        let result = jwt.verify(token, 'jianshu-server-jwt')
+        let result = jwt.verify(token, 'jianshu-server-jwt') //解析token里 {username: 'qqqq',_id: '61dae237144807cea88cc7e5',iat: 1641744804,exp: 1642349604}
         await modelsUsers.Users.findOne({_id: result._id}).then(rel=>{
             if(rel){
                 ctx.body = {
@@ -32,13 +32,13 @@ const verify = async (ctx) => {
 };
 
 //登录
-const userLogin = async (ctx) => {
+const userLogin = async ctx => {
     let { username = "", pwd = "" } = ctx.request.body;
-
     await crud.Login(modelsUsers.Users, { username, pwd } ,ctx)
 };
-//register
-const userRegister = async (ctx) => {
+
+//注册
+const userRegister = async ctx => {
     let isDouble = false
     // console.log('userRegister', ctx.request.body) { username: 'adc', pwd: '1234' }
     //注册前查询用户是否存在
@@ -55,7 +55,6 @@ const userRegister = async (ctx) => {
 
     await crud.Add(modelsUsers.Users, ctx.request.body, ctx)
 };
-// 修改密码
 
 
 //添加用户
@@ -64,11 +63,14 @@ const userAdd = async (ctx) => {
     await crud.Add(modelsUsers.Users, { username, pwd }, ctx)
 };
 
+
+// 删除用户
 const userDel = async (ctx, next) => {
     let { _id } = ctx.request.body;
     await crud.Del(modelsUsers.Users, null, { _id },ctx)
 };
 
+// 修改用户
 const userUpdate = async (ctx, next) => {
     let params = ctx.request.body; //{ _id: '61d9bba7b3217726997ba1c0', username: 'xxxcccs', pwd: '12341' }
     console.log('userUpdate,params',params)
