@@ -8,15 +8,6 @@ const protectedUploadRouter = new Router({ //有保护的
     prefix: '/upload'
 });
 
-//     // // //文件名称
-//     // filename: function(req, file, cb){
-//     //     // let fileName = file.filename + '-' + Date.now() + path.extname(file.originalname)
-//     //     let fileFormat = (file.originalname).split(".");
-//     //     cb(null,Date.now() + "." + fileFormat[fileFormat.length - 1]);
-//     //     // cb(null, fileName) //设置上传文件的名字
-//     // }
-// })
-
 let storage = multer.diskStorage({
     // 文件保存路径
     destination: function (req, file, cb) {
@@ -36,10 +27,11 @@ let storage = multer.diskStorage({
       }  
       cb(null, dir) //文件上传到目录
     },
-
+    
+    //设置上传文件的名字
     filename: function(req, file, cb){
         let fileName = file.fieldname + '-' + Date.now() + '-' + file.originalname
-        cb(null, fileName) //设置上传文件的名字
+        cb(null, fileName) 
     }
 })
 
@@ -48,9 +40,12 @@ let upload = multer({ storage: storage })
 
 
 protectedUploadRouter.post("/img", upload.single('myfile'), async ctx => { //myfile字段 //body form-data
+    let path = ctx.req.file.path.replace('public','')
+    path = ctx.origin + '' + path.replace()
     ctx.body = {
         filename: ctx.req.file.filename,//返回文件名
-        data: ctx.req.file //地址
+        path: path,
+        data: ctx.req.file 
     }
 });
 
