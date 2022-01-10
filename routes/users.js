@@ -19,7 +19,7 @@ protectedUserRouter.post("/add", userCtl.userAdd);
 
 protectedUserRouter.delete("/del", userCtl.userDel);
 
-protectedUserRouter.put("/update", userCtl.userUpdate); //修改用户名密码
+protectedUserRouter.put("/pwdupdate", userCtl.userUpdate); //修改用户名密码
 
 protectedUserRouter.get("/findall", userCtl.userFindAll);
 
@@ -27,5 +27,6 @@ protectedUserRouter.get("/findall", userCtl.userFindAll);
 
 protectedUserRouter.get("/find", userCtl.userFindOne);//post query参数传值
 
+protectedUserRouter.put("/dataupdate", userCtl.userDataUpdate); //修改用户资料
 
 module.exports = { unprotectedRouter, protectedUserRouter };

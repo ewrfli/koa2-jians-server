@@ -109,7 +109,8 @@ const Del = (model, where, params, ctx) => (
 const Update = (model, where, params, ctx) => (
     model.updateOne(where, params)                                                            //{ _id: params._id },{username: params.username,pwd: params.pwd,}
         .then((rel) => {
-            if (rel) {
+            console.log('crud update rel',rel)
+            if (rel.acknowledged === true) {
                 ctx.body = {
                     code: 200,
                     msg: "修改成功",

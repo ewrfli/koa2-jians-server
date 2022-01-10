@@ -77,11 +77,35 @@ const userUpdate = async (ctx, next) => {
     await crud.Update(  //model, where, params, ctx
         modelsUsers.Users,
         { _id: params._id },
-        {username: params.username, pwd: params.pwd}, 
+        {
+            username: params.username, 
+            pwd: params.pwd,
+            id: params.id,
+            power: params.power,
+        }, 
         ctx
     )
 };
 
+//修改用户资料
+const userDataUpdate = async (ctx, next) => {
+    let params = ctx.request.body; //{ _id: '61d9bba7b3217726997ba1c0', username: 'xxxcccs', pwd: '12341' }
+    console.log('userDataUpdate,params',params)
+    await crud.Update(  //model, where, params, ctx
+        modelsUsers.Users,
+        { _id: params._id },
+        {
+            avatar: params.avatar, 
+            sex: params.sex ,
+            desc: params.desc ,
+            phone: params.phone ,
+            email: params.email 
+        }, 
+        ctx
+    )
+};
+
+//查找所有用户
 const userFindAll = async (ctx, next) => {
     await crud.Find(modelsUsers.Users, null, ctx)
 };
@@ -117,5 +141,6 @@ module.exports = {
     userUpdate,
     userFindAll,
     userFindOne,
+    userDataUpdate
     
 };

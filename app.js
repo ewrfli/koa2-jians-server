@@ -49,11 +49,12 @@ app.use(cors())
 
 // routes
 app.use(unprotectedRouter.routes(), unprotectedRouter.allowedMethods())
-app.use(protectedUploadRouter.routes(), protectedUploadRouter.allowedMethods())//文件上传
+
 // 注册 JWT 中间件 
 app.use(koajwt({ secret: 'jianshu-server-jwt' }));//.unless({ method: 'GET' })
 //受jwk保护的放后面
 // app.use(index.routes(), index.allowedMethods())
+app.use(protectedUploadRouter.routes(), protectedUploadRouter.allowedMethods())//文件上传
 app.use(protectedUserRouter.routes(), protectedUserRouter.allowedMethods())
 
 
