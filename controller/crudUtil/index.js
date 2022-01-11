@@ -1,3 +1,4 @@
+//crud工具函数
 const jwt = require('jsonwebtoken')
 
 const Login = (model, params, ctx) => (
