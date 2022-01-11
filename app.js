@@ -8,6 +8,7 @@ const logger = require('koa-logger')
 const MongoConnect = require('./db')
 const cors = require('koa2-cors')
 const koajwt = require('koa-jwt')
+const mylogger = require('./controller/mylogger')
 //连接数据库
 MongoConnect()
 
@@ -21,22 +22,17 @@ onerror(app)
 // middlewares koa原生中间件
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
-}))
+})) //请求体解析中间件 ctx.response.body
 app.use(json())
-app.use(logger())
+app.use(logger()) //日志记录
 app.use(require('koa-static')(__dirname + '/public'))
 app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
 //
 
-// 请求记录logger中间件
-app.use(async (ctx, next) => {
-  const start = new Date()
-  await next()
-  const ms = new Date() - start
-  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
-})
+// 自定义请求日志记录logger中间件
+app.use(mylogger())
 
 //跨域cors中间件
 app.use(cors())
