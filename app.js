@@ -11,27 +11,26 @@ const koajwt = require('koa-jwt')
 //连接数据库
 MongoConnect()
 
-const index = require('./routes/index')
-// const users = require('./routes/users')
+//有入路由
 const { unprotectedRouter, protectedUserRouter } = require('./routes/users')
 const protectedUploadRouter = require('./routes/upload')
 
 // error handler
 onerror(app)
 
-// middlewares
+// middlewares koa原生中间件
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
 }))
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
-
 app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
+//
 
-// logger
+// 请求记录logger中间件
 app.use(async (ctx, next) => {
   const start = new Date()
   await next()
@@ -39,21 +38,16 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
-// app.use(koajwt({
-//   secret: 'jianshu-server-jwt'
-// }).unless({
-//   path:[/^\/users\/login/]
-// }))
-
+//跨域cors中间件
 app.use(cors())
 
-// routes
+// 不受保护的routes
 app.use(unprotectedRouter.routes(), unprotectedRouter.allowedMethods())
 
 // 注册 JWT 中间件 
 app.use(koajwt({ secret: 'jianshu-server-jwt' }));//.unless({ method: 'GET' })
-//受jwk保护的放后面
-// app.use(index.routes(), index.allowedMethods())
+
+//受jwk保护的routes放后面
 app.use(protectedUploadRouter.routes(), protectedUploadRouter.allowedMethods())//文件上传
 app.use(protectedUserRouter.routes(), protectedUserRouter.allowedMethods())
 
