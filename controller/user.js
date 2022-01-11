@@ -1,41 +1,13 @@
 //用户操作相关中间件
-const models = require('../models/index');
 const modelsUsers = require('../models/users');
-const crud = require('./crudUtil/index')
-const jwt = require('jsonwebtoken')
+const crud = require('./crudUtil')
+const jwtUtil = require("./jwtUtil");
 
-// 验证用户登录
-const verify = async (ctx) => {
-    let token = ctx.header.authorization //签发token 下次请求中附带在Authorization:Bearer ...Jwt...
-    token = token.replace('Bearer ','')
-    try {
-        let result = jwt.verify(token, 'jianshu-server-jwt') //解析token里 {username: 'qqqq',_id: '61dae237144807cea88cc7e5',iat: 1641744804,exp: 1642349604}
-        await modelsUsers.Users.findOne({_id: result._id}).then(rel=>{
-            if(rel){
-                ctx.body = {
-                    code: 200,
-                    msg: "认证成功",
-                    user: rel
-                };
-            }else {
-                ctx.body = {
-                    code: 500,
-                    msg: "认证失败",
-                };
-            }
-        })
-    } catch (err) {
-        ctx.body = {
-            code: 500,
-            msg: "认证失败",
-        };
-    }
-};
 
 //登录
 const userLogin = async ctx => {
     let { username = "", pwd = "" } = ctx.request.body;
-    await crud.Login(modelsUsers.Users, { username, pwd } ,ctx)
+    await jwtUtil.LoginJwtUtil(modelsUsers.Users, { username, pwd } ,ctx)
 };
 
 //注册
@@ -134,7 +106,6 @@ const userFindOne = async (ctx, next) => {
 };
 
 module.exports = {
-    verify,
     userLogin,
     userRegister,
     userAdd,

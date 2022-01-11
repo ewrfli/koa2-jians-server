@@ -1,5 +1,7 @@
 const Router = require("@koa/router")
 const userCtl = require("../controller/user");
+const jwtUtil = require("../controller/jwtUtil");
+
 
 const unprotectedRouter = new Router({  //unprotected无保护的
     prefix: '/users'
@@ -8,12 +10,10 @@ unprotectedRouter.post("/login", userCtl.userLogin);
 unprotectedRouter.post("/register", userCtl.userRegister);
 
 
-
 const protectedUserRouter = new Router({ //有保护的
     prefix: '/users'
 });
-
-protectedUserRouter.post("/verify", userCtl.verify);
+protectedUserRouter.post("/verify", jwtUtil.verifyJwtUtil); //验证是否登录成功测试路由
 
 protectedUserRouter.post("/add", userCtl.userAdd);
 

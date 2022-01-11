@@ -9,6 +9,7 @@ const MongoConnect = require('./db')
 const cors = require('koa2-cors')
 const koajwt = require('koa-jwt')
 const mylogger = require('./controller/mylogger')
+const SIGN_KEY = 'jianshu-server-jwt'
 //连接数据库
 MongoConnect()
 
@@ -32,16 +33,16 @@ app.use(views(__dirname + '/views', {
 //
 
 // 自定义请求日志记录logger中间件
-app.use(mylogger())
+// app.use(mylogger())
 
 //跨域cors中间件
 app.use(cors())
 
 // 不受保护的routes
-app.use(unprotectedRouter.routes(), unprotectedRouter.allowedMethods())
+app.use(unprotectedRouter.routes(), unprotectedRouter.allowedMethods()) //allowedMethods: ctx.status为空或者404的时候,丰富response对象的header头.
 
 // 注册 JWT 中间件 
-app.use(koajwt({ secret: 'jianshu-server-jwt' }));//.unless({ method: 'GET' })
+app.use(koajwt({ secret: SIGN_KEY }));//.unless({ method: 'GET' })
 
 //受jwk保护的routes放后面
 app.use(protectedUploadRouter.routes(), protectedUploadRouter.allowedMethods())//文件上传

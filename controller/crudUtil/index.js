@@ -1,39 +1,4 @@
 //crud工具函数
-const jwt = require('jsonwebtoken')
-
-const Login = (model, params, ctx) => (
-    // console.log('params',params)
-    model.findOne(params)//
-        .then((rel) => {
-            if (rel) { //有rel代表数据库找到此用户
-                let token = jwt.sign({  //签发token 下次请求中附带在Authorization:Bearer ...Jwt...
-                    username: rel.username,  //这里的 Token 负载就是标识用户 ID 的对象 { id: user.id } ，这样后面鉴权成功后就可以通过 ctx.user.id 来获取用户 ID
-                    _id: rel._id
-                },'jianshu-server-jwt',{
-                    expiresIn: 3600*24*7
-                })
-
-                ctx.body = {
-                    code: 200,
-                    msg: "登录成功",
-                    reslut: rel, 
-                    token
-                };
-            } else {
-                ctx.body = {
-                    code: 300,
-                    msg: "登录失败用户名密码错误或不存在",
-                };
-            }
-        })
-        .catch((err) => {
-            ctx.body = {
-                code: 400,
-                msg: "登录异常",
-            };
-            console.error(err);
-        })
-)
 
 /**
  * 
@@ -200,7 +165,6 @@ const FindOne = (model, params, ctx) => (
 )
 
 module.exports = {
-    Login,
     Add,
     Del,
     Update,
