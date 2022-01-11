@@ -55,7 +55,7 @@ const verifyJwtUtil = async (ctx) => {
     let token = ctx.header.authorization //签发token 下次请求中附带在Authorization:Bearer ...Jwt...
     token = token.replace('Bearer ','')
     try {
-        let result = jwt.verify(token, 'jianshu-server-jwt') //解析token里 {username: 'qqqq',_id: '61dae237144807cea88cc7e5',iat: 1641744804,exp: 1642349604}
+        let result = JWT.verifyToken(token, SIGN_KEY) //解析token里 {username: 'qqqq',_id: '61dae237144807cea88cc7e5',iat: 1641744804,exp: 1642349604}
         // console.log('verify解析后', result)
         await modelsUsers.Users.findOne({_id: result._id}).then(rel=>{
             if(rel){
