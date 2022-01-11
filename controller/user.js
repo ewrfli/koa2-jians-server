@@ -68,6 +68,7 @@ const userDataUpdate = async (ctx, next) => {
         modelsUsers.Users,
         { _id: params._id },
         {
+            username: params.username, 
             avatar: params.avatar, 
             sex: params.sex ,
             desc: params.desc ,

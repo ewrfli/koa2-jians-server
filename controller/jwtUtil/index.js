@@ -52,7 +52,7 @@ const LoginJwtUtil = (model, params, ctx) => (
 // 验证用户登录工具函数
 const verifyJwtUtil = async (ctx) => {
     // console.log('ctx.header.authorization',ctx.header.authorization)
-    let token = ctx.header.authorization //签发token 下次请求中附带在Authorization:Bearer ...Jwt...
+    let token = ctx.header.authorization //签发token 下次请求中附带在authorization:Bearer ...Jwt...
     token = token.replace('Bearer ','')
     try {
         let result = JWT.verifyToken(token, SIGN_KEY) //解析token里 {username: 'qqqq',_id: '61dae237144807cea88cc7e5',iat: 1641744804,exp: 1642349604}

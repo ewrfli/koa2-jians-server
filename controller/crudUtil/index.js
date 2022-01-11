@@ -73,7 +73,7 @@ const Del = (model, where, params, ctx) => (
  * @returns 
  */
 const Update = (model, where, params, ctx) => (
-    model.updateOne(where, params)                                                            //{ _id: params._id },{username: params.username,pwd: params.pwd,}
+    model.updateOne(where, params)      //{ _id: params._id },{username: params.username,pwd: params.pwd,}
         .then((rel) => {
             console.log('crud update rel',rel)
             if (rel.acknowledged === true) {
