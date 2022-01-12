@@ -8,4 +8,6 @@ const articleRouter = new Router({  //unprotected无保护的
 articleRouter.post("/add", articleCtl.articleAdd);
 articleRouter.post("/findone", articleCtl.articleFindOne);
 articleRouter.post("/findall", articleCtl.articleFindAll);
+articleRouter.delete("/del", articleCtl.articleDel);
+articleRouter.post("/update", articleCtl.articleUpdate);
 module.exports = articleRouter

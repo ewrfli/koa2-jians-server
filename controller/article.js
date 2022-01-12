@@ -3,13 +3,28 @@ const crud = require('./crudUtil')
 
 //发布文章
 const articleAdd = async ctx => {
-    let artText = ctx.request.body;
-    console.log('artText',artText)
-    await crud.Add(modelsArticle.Articles, artText, ctx)
+    let {title = "",createTime="",content="",stemfrom=""} = ctx.request.body;
+    console.log('artText',ctx.request.body)
+    await crud.Add(modelsArticle.Articles, {title,createTime,content,stemfrom}, ctx)
 }
+
 //删除文章
+const articleDel = async ctx => {
+    let { _id } = ctx.request.body;
+    await crud.Del(modelsArticle.Articles, null, { _id },ctx)
+}
 
 // 修改文章
+const articleUpdate = async ctx => {
+    let params = ctx.request.body;
+    console.log('userUpdate,params',params)
+    await crud.Update(  //model, where, params, ctx
+        modelsArticle.Articles,
+        { _id: params._id },
+        params, 
+        ctx
+    )
+}
 
 // 查询所有文章 /作者的所有文章
 const articleFindAll = async ctx => {
@@ -27,7 +42,7 @@ const articleFindAll = async ctx => {
         let pageSize = 5;
         //计算总条数
         let count = 0
-        await modelsArticle.Articles.find({author}).count().then(rel=>{
+        await modelsArticle.Articles.find(ctx.request.body).count().then(rel=>{
             count = rel
         })
         let totalPage = 0
@@ -43,7 +58,7 @@ const articleFindAll = async ctx => {
 
         //计算起始位置
         let start = (page - 1) * pageSize   //limit()跨越多少个元素
-        await modelsArticle.Articles.find({author}).skip(start).limit(pageSize).then(rel => {
+        await modelsArticle.Articles.find(ctx.request.body).skip(start).limit(pageSize).then(rel => {
             if(rel && rel.length > 0){
                 ctx.body = {
                     code: 200,
@@ -78,12 +93,43 @@ const articleFindAll = async ctx => {
 
 const articleFindOne = async ctx => {
     let keyword = ctx.request.body;
-    console.log('keyword',keyword)
-    await crud.FindOne(modelsArticle.Articles, keyword, ctx)
+    let isRead = false
+    console.log('keyword',keyword) 
+    // await crud.FindOne(modelsArticle.Articles, keyword, ctx)
+
+    await modelsArticle.Articles.findOne(keyword)//
+    .then((rel) => {
+        if (rel) {
+            isRead = true
+            ctx.body = {
+                code: 200,
+                msg: "查询成功",
+                reslut: rel, //返回对象
+            };
+        } else {
+            ctx.body = {
+                code: 300,
+                msg: "查询失败",
+            };
+        }
+    })
+    .catch((err) => {
+        ctx.body = {
+            code: 400,
+            msg: "查询异常",
+        };
+        console.error(err);
+    })
+
+    if(isRead){
+        await modelsArticle.Articles.updateOne(keyword,{$inc:{read: 1}}) //$inc自增
+    } 
 }
 
 module.exports = {
     articleAdd,
     articleFindAll,
-    articleFindOne
+    articleFindOne,
+    articleDel,
+    articleUpdate,
 }
