@@ -13,10 +13,10 @@ const SIGN_KEY = 'jianshu-server-jwt'
 //连接数据库
 MongoConnect()
 
-//有入路由
+//引入路由
 const { unprotectedRouter, protectedUserRouter } = require('./routes/users')
 const protectedUploadRouter = require('./routes/upload')
-
+const articleRouter = require('./routes/article')
 // error handler
 onerror(app)
 
@@ -47,6 +47,7 @@ app.use(koajwt({ secret: SIGN_KEY }));//.unless({ method: 'GET' })
 //受jwk保护的routes放后面
 app.use(protectedUploadRouter.routes(), protectedUploadRouter.allowedMethods())//文件上传
 app.use(protectedUserRouter.routes(), protectedUserRouter.allowedMethods())
+app.use(articleRouter.routes(), articleRouter.allowedMethods()) //文章相关路由
 
 
 // error-handling

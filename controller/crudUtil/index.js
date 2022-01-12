@@ -8,7 +8,7 @@
  * @returns 
  */
  const Add = (model, params, ctx) => (
-    model.create(params) //{ username, pwd }
+    model.create(params) //{ username, pwd } //
     .then((rel) => {
         if (rel) {
             ctx.body = {
@@ -109,23 +109,24 @@ const Update = (model, where, params, ctx) => (
 const Find = (model, where, ctx) => (
     model.find(where)
     .then(rel => {
-        if (rel) {
+        if (rel && rel.length > 0) {
+            console.log('rel',rel)
             ctx.body = {
                 code: 200,
-                msg: "成功",
+                msg: "查询所有成功",
                 reslut: rel, 
             };
         } else {
             ctx.body = {
                 code: 300,
-                msg: "失败",
+                msg: "查询所有失败",
             };
         }
     })
     .catch(err => {
         ctx.body = {
             code: 400,
-            msg: "异常",
+            msg: "查询所有异常",
         };
         console.error(err);
     })
@@ -142,7 +143,6 @@ const FindOne = (model, params, ctx) => (
     model.findOne(params)//
         .then((rel) => {
             if (rel) {
-
                 ctx.body = {
                     code: 200,
                     msg: "查询成功",
@@ -158,7 +158,7 @@ const FindOne = (model, params, ctx) => (
         .catch((err) => {
             ctx.body = {
                 code: 400,
-                msg: "异常",
+                msg: "查询异常",
             };
             console.error(err);
         })

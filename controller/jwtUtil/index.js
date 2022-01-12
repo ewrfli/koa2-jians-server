@@ -7,7 +7,7 @@ const modelsUsers = require('../../models/users');//verifyJwtUtil需数据库找
  //这样后面鉴权成功后就可以通过 ctx.user.id 来获取用户 ID
 class jwtUtil {
     getToken(userDate) {
-        return jwt.sign(userDate, SIGN_KEY, { expiresIn: 600 })//过期时间 3600 * 24 *7
+        return jwt.sign(userDate, SIGN_KEY, { expiresIn: 3600 * 24 *7 })//过期时间 3600 * 24 *7
     }
 
     verifyToken(token) {
