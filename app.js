@@ -18,6 +18,7 @@ const { unprotectedRouter, protectedUserRouter } = require('./routes/users')
 const protectedUploadRouter = require('./routes/upload')
 const articleRouter = require('./routes/article')
 const commentRouter = require('./routes/comment')
+const fansRouter = require('./routes/fans')
 // error handler
 onerror(app)
 
@@ -50,6 +51,7 @@ app.use(protectedUploadRouter.routes(), protectedUploadRouter.allowedMethods())/
 app.use(protectedUserRouter.routes(), protectedUserRouter.allowedMethods())
 app.use(articleRouter.routes(), articleRouter.allowedMethods()) //文章相关路由 commentRouter
 app.use(commentRouter.routes(), commentRouter.allowedMethods()) //评论相关路由
+app.use(fansRouter.routes(), fansRouter.allowedMethods())//fansRouter粉丝相关路由
 
 // error-handling
 app.on('error', (err, ctx) => {
