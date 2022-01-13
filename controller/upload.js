@@ -35,6 +35,7 @@ let upload = multer({ storage: storage })
 
 let uploadSin = upload.single('myfile')
 
+// 头像图片
 const uploadImg = async ctx => { //myfile字段 //body form-data
     let path = ctx.req.file.path.replace('public','')
     path = ctx.origin + '' + path.replace()
@@ -45,7 +46,26 @@ const uploadImg = async ctx => { //myfile字段 //body form-data
     }
 }
 
+//文章图片
+let editorUploadSin = upload.single('editorFile')
+const editorUploadImg = async ctx => { //file字段 //body form-data
+    let path = ctx.req.file.path.replace('public','')
+    path = ctx.origin + '' + path.replace()
+    ctx.body = {
+        errno: 0,
+        data:[{
+            filename: ctx.req.file.filename,//返回文件名
+            data: ctx.req.file,
+            url: path,
+            alt: '',
+            href: ''
+        }]
+    }
+}
+
 module.exports = {
     uploadSin,
-    uploadImg
+    uploadImg,
+    editorUploadSin,
+    editorUploadImg
 }

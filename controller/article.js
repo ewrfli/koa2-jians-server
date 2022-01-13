@@ -42,7 +42,7 @@ const articleFindAll = async ctx => {
             page = Number(page)
         }
         //每页条数
-        let pageSize = 5;
+        let pageSize = 10;
         //计算总条数
         let count = 0
         await modelsArticle.Articles.find(ctx.request.body).count().then(rel=>{
