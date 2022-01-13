@@ -3,9 +3,9 @@ const crud = require('./crudUtil')
 
 //发布文章
 const articleAdd = async ctx => {
-    let {title = "",createTime="",content="",stemfrom="",author=""} = ctx.request.body;
+    let {id="",title = "",createTime="",content="",stemfrom="",author=""} = ctx.request.body;
     console.log('artText',ctx.request.body)
-    await crud.Add(modelsArticle.Articles, {title,createTime,content,stemfrom,author}, ctx)
+    await crud.Add(modelsArticle.Articles, {id,title,createTime,content,stemfrom,author}, ctx)
 }
 
 //删除文章
