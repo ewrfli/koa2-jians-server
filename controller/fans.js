@@ -28,6 +28,30 @@ const fansFollow = async ctx => {
     })
 }
 
+const unfansFollow = async ctx => {
+    let {username, author} = ctx.request.body
+    await fansComment.Fans.findOneAndDelete({username,author}).then(rel=>{
+        if(rel){
+            ctx.body = {
+                code: 200,
+                msg: '取关成功',
+                result: rel
+            }
+        }else {
+            ctx.body = {
+                code: 300,
+                msg: "取关失败"
+            }
+        }
+    }).catch(err=>{
+        ctx.body = {
+            code: 500,
+            msg: "取关时出现异常",
+            err
+        }
+    })
+}
+
 const fansAdd = async ctx => {
 
 }
@@ -51,6 +75,7 @@ const fansFindOne = async ctx => {
 
 module.exports = {
     fansFollow,
+    unfansFollow,
     fansAdd,
     fansFindAll,
     fansFindOne,
