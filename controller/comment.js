@@ -5,7 +5,9 @@ const crud = require('./crudUtil')
 // 添加评论
 const commentAdd = async ctx => {
     let {id = "",username="",articleAuthor="",articleTitle="",articleId="",commentContent="",commentCreateTime=""} = ctx.request.body;
-
+    if(!id){
+        id = Date.now()
+    }
     await crud.Add(modelsComment.Comments, {id,username,articleAuthor,articleTitle,articleId,commentContent,commentCreateTime}, ctx)
 
     if(ctx.response.body.code === 200){ //找到了相应文章 comment+1

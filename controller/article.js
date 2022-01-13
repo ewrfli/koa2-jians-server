@@ -4,7 +4,10 @@ const crud = require('./crudUtil')
 //发布文章
 const articleAdd = async ctx => {
     let {id="",title = "",createTime="",content="",stemfrom="",author=""} = ctx.request.body;
-    console.log('artText',ctx.request.body)
+    // console.log('artText',ctx.request.body)
+    if(!id){ //id不为空这则用前端传的id id为空则赋一个
+        id = Date.now()
+    }
     await crud.Add(modelsArticle.Articles, {id,title,createTime,content,stemfrom,author}, ctx)
 }
 
@@ -26,7 +29,7 @@ const articleUpdate = async ctx => {
     )
 }
 
-// 查询所有文章 /作者的所有文章
+// 查询所有文章 /某作者的所有文章
 const articleFindAll = async ctx => {
     let{ page, author, title } = ctx.request.body;
     console.log('keyword',ctx.request.body)
