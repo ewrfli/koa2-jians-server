@@ -40,9 +40,10 @@
  * @returns 
  */
 const Del = (model, where, params, ctx) => (
-    model.findOneAndDelete(params)//{ _id }
+    model.findOneAndDelete(params)//{ id }
     .then((rel) => {
         if (rel) {
+            console.log('crudDel',params)
             ctx.body = {
                 code: 200,
                 msg: "删除成功",
@@ -60,7 +61,7 @@ const Del = (model, where, params, ctx) => (
             code: 400,
             msg: "删除异常",
         };
-        console.error(err);
+        console.error('err',err);
     })
 )
 
@@ -110,11 +111,12 @@ const Find = (model, where, ctx) => (
     model.find(where)
     .then(rel => {
         if (rel && rel.length > 0) {
-            console.log('rel',rel)
+            // console.log('crudFindrel',rel)
             ctx.body = {
                 code: 200,
                 msg: "查询所有成功",
                 reslut: rel, 
+                count:rel.length
             };
         } else {
             ctx.body = {
