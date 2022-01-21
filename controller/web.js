@@ -1,33 +1,9 @@
 const modelsArticle = require('../models/article');
+const modelsUsers = require('../models/users');
 const crud = require('./crudUtil')
 
-//发布文章
-const articleAdd = async ctx => {
-    let {id="",title = "",createTime="",content="",stemfrom="",author="",coverImg=""} = ctx.request.body;
-    // console.log('artText',ctx.request.body)
-    if(!id){ //id不为空这则用前端传的id id为空则赋一个
-        id = Date.now()
-    }
-    await crud.Add(modelsArticle.Articles, {id,title,createTime,content,stemfrom,author,coverImg}, ctx)
-}
 
-//删除文章
-const articleDel = async ctx => {
-    let { _id } = ctx.request.body;
-    await crud.Del(modelsArticle.Articles, null, { _id },ctx)
-}
 
-// 修改文章
-const articleUpdate = async ctx => {
-    let params = ctx.request.body;
-    console.log('userUpdate,params',params)
-    await crud.Update(  //model, where, params, ctx
-        modelsArticle.Articles,
-        { _id: params._id },
-        params, 
-        ctx
-    )
-}
 
 // 查询所有文章 /某作者的所有文章
 const articleFindAll = async ctx => {
@@ -170,7 +146,6 @@ const articleFindAuthor = async ctx => {
 }
 
 // 查询当前文库所有分类
-// 查询当前文章库所有作者
 const articleFindStemfrom = async ctx => {
     await modelsArticle.Articles.find()
     .then(rel=>{
@@ -211,11 +186,5 @@ const articleFindStemfrom = async ctx => {
 }
 
 module.exports = {
-    articleAdd,
-    articleFindAll,
-    articleFindOne,
-    articleDel,
-    articleUpdate,
-    articleFindAuthor,
-    articleFindStemfrom
+
 }

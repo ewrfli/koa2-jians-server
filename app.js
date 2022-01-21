@@ -19,6 +19,7 @@ const protectedUploadRouter = require('./routes/upload')
 const articleRouter = require('./routes/article')
 const commentRouter = require('./routes/comment')
 const fansRouter = require('./routes/fans')
+const webRouter = require('./routes/web')
 // error handler
 onerror(app)
 
@@ -41,11 +42,11 @@ app.use(views(__dirname + '/views', {
 app.use(cors())
 
 // 不受保护的routes
+app.use(webRouter.routes(), articleRouter.allowedMethods()) //
 app.use(unprotectedRouter.routes(), unprotectedRouter.allowedMethods()) //allowedMethods: ctx.status为空或者404的时候,丰富response对象的header头.
 
 // 注册 JWT 中间件 
 app.use(koajwt({ secret: SIGN_KEY }));//.unless({ method: 'GET' })
-
 //受jwk保护的routes放后面
 app.use(protectedUploadRouter.routes(), protectedUploadRouter.allowedMethods())//文件上传
 app.use(protectedUserRouter.routes(), protectedUserRouter.allowedMethods())

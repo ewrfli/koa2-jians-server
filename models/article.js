@@ -5,6 +5,10 @@ const articleSchecma = new mongoose.Schema({
     createTime: String,
     content: String,
     stemfrom: String,
+    coverImg: {
+        type: String,
+        default: ''
+    },
     read: {
         type:Number,
         default: 0

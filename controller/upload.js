@@ -33,10 +33,21 @@ let storage = multer.diskStorage({
 //加载配置
 let upload = multer({ storage: storage })
 
-let uploadSin = upload.single('myfile')
-
 // 头像图片
+let uploadSin = upload.single('myfile')
 const uploadImg = async ctx => { //myfile字段 //body form-data
+    let path = ctx.req.file.path.replace('public','')
+    path = ctx.origin + '' + path.replace()
+    ctx.body = {
+        filename: ctx.req.file.filename,//返回文件名
+        path: path,
+        data: ctx.req.file 
+    }
+}
+
+// 封面图片
+let coverSin = upload.single('coverFile')
+const coverImg = async ctx => { //myfile字段 //body form-data
     let path = ctx.req.file.path.replace('public','')
     path = ctx.origin + '' + path.replace()
     ctx.body = {
@@ -64,6 +75,8 @@ const editorUploadImg = async ctx => { //file字段 //body form-data
 }
 
 module.exports = {
+    coverSin,
+    coverImg,
     uploadSin,
     uploadImg,
     editorUploadSin,
