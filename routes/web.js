@@ -5,7 +5,7 @@ const webRouter = new Router({  //unprotected无保护的
     prefix: '/web'
 });
 
-// webRouter.post("/findall", webCtl.articleFindAll);
+webRouter.get("/findall", webCtl.articleFindAllweb);
 // webRouter.post("/findone", webCtl.articleFindOne);
 
 // webRouter.get("/author", webCtl.articleFindAuthor);

@@ -91,7 +91,7 @@ const commentFindAll = async ctx => {
 
         //计算起始位置
         let start = (page - 1) * pageSize   //limit()跨越多少个元素
-        await modelsComment.Comments.find(params).skip(start).limit(pageSize).then(rel => {
+        await modelsComment.Comments.find(params).sort('-commentCreateTime').skip(start).limit(pageSize).then(rel => {
             if(rel && rel.length > 0){
                 ctx.body = {
                     code: 200,

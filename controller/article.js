@@ -61,7 +61,8 @@ const articleFindAll = async ctx => {
 
         //计算起始位置
         let start = (page - 1) * pageSize   //limit()跨越多少个元素
-        await modelsArticle.Articles.find(ctx.request.body).skip(start).limit(pageSize).then(rel => {
+        await modelsArticle.Articles.find(ctx.request.body).sort('-createTime').skip(start).limit(pageSize)
+        .then(rel => {
             if(rel && rel.length > 0){
                 ctx.body = {
                     code: 200,
