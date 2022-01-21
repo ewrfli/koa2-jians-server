@@ -94,7 +94,7 @@ const articleFindAll = async ctx => {
 }
 
 
-const articleFindOne = async ctx => {
+const articleFindOne = async ctx => {  
     let keyword = ctx.request.body;
     let isRead = false
     console.log('keyword',keyword) 
@@ -129,10 +129,93 @@ const articleFindOne = async ctx => {
     } 
 }
 
+// 查询当前文章库所有作者
+const articleFindAuthor = async ctx => {
+    await modelsArticle.Articles.find()
+    .then(rel=>{
+        if (rel) {
+            let authorArr = []
+            for(item in rel){
+                authorArr.push(rel[item].author)
+            }
+            authorArr = [...new Set(authorArr)]
+            var newarr = []
+            for(let i=0; i<authorArr.length;i++){
+                var newobj = {}
+                newobj['label'] = authorArr[i]
+                console.log(newobj)
+                newarr.push(newobj)
+                console.log(newarr)
+            }
+            ctx.body = {
+                code: 200,
+                msg: "作者查询成功",
+                reslut: newarr, //返回对象
+                count: authorArr
+            };
+        } else {
+            ctx.body = {
+                code: 300,
+                msg: "作者查询失败",
+            };
+        }
+    })
+    .catch((err) => {
+        ctx.body = {
+            code: 400,
+            msg: "作者查询异常",
+        };
+        console.error(err);
+    })
+}
+
+// 查询当前文库所有分类
+// 查询当前文章库所有作者
+const articleFindStemfrom = async ctx => {
+    await modelsArticle.Articles.find()
+    .then(rel=>{
+        if (rel) {
+            let stemfromArr = []
+            for(item in rel){
+                stemfromArr.push(rel[item].stemfrom)
+            }
+            stemfromArr = [...new Set(stemfromArr)]
+            var newarr = []
+            for(let i=0; i<stemfromArr.length;i++){
+                var newobj = {}
+                newobj['label'] = stemfromArr[i]
+                console.log(newobj)
+                newarr.push(newobj)
+                console.log(newarr)
+            }
+            ctx.body = {
+                code: 200,
+                msg: "类别查询成功",
+                reslut: newarr, //返回对象
+                count: stemfromArr
+            };
+        } else {
+            ctx.body = {
+                code: 300,
+                msg: "类别查询失败",
+            };
+        }
+    })
+    .catch((err) => {
+        ctx.body = {
+            code: 400,
+            msg: "类别查询异常",
+        };
+        console.error(err);
+    })
+}
+
 module.exports = {
     articleAdd,
     articleFindAll,
     articleFindOne,
     articleDel,
     articleUpdate,
+    articleFindAuthor,
+    articleFindStemfrom
 }

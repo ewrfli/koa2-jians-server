@@ -10,4 +10,6 @@ articleRouter.post("/findone", articleCtl.articleFindOne);
 articleRouter.post("/findall", articleCtl.articleFindAll);
 articleRouter.post("/del", articleCtl.articleDel);
 articleRouter.post("/update", articleCtl.articleUpdate);
+articleRouter.get("/author", articleCtl.articleFindAuthor);//
+articleRouter.get("/stemfrom", articleCtl.articleFindStemfrom);
 module.exports = articleRouter
