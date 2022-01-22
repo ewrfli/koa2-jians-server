@@ -3,12 +3,12 @@ const crud = require('./crudUtil')
 
 //发布文章
 const articleAdd = async ctx => {
-    let {id="",title = "",createTime="",content="",stemfrom="",author="",coverImg=""} = ctx.request.body;
+    let {id="",title = "",createTime="",content="",desc="",stemfrom="",author="",coverImg=""} = ctx.request.body;
     // console.log('artText',ctx.request.body)
     if(!id){ //id不为空这则用前端传的id id为空则赋一个
         id = Date.now()
     }
-    await crud.Add(modelsArticle.Articles, {id,title,createTime,content,stemfrom,author,coverImg}, ctx)
+    await crud.Add(modelsArticle.Articles, {id,title,createTime,content,desc,stemfrom,author,coverImg}, ctx)
 }
 
 //删除文章

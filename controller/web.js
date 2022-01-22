@@ -36,6 +36,7 @@ const articleFindAllweb = async ctx => {
 
         //计算起始位置
         let start = (page - 1) * pageSize   //limit()跨越多少个元素
+        console.log('start',start)
         await modelsArticle.Articles.aggregate([
             {
                 $lookup: {
@@ -45,9 +46,9 @@ const articleFindAllweb = async ctx => {
                     as: "user"
                 }
             },
-            {$limit : pageSize},
+            {$sort: { "createTime" : -1}},
             {$skip : start},
-            {$sort: { "createTime" : -1}}
+            {$limit : pageSize}
 
         ],function(err,docs){
             if(docs && docs.length > 0){

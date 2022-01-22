@@ -4,6 +4,7 @@ const articleSchecma = new mongoose.Schema({
     title: String,
     createTime: String,
     content: String,
+    desc: String,
     stemfrom: String,
     coverImg: {
         type: String,
