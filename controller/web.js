@@ -7,19 +7,99 @@ const crud = require('./crudUtil')
 
 // 查询所有文章 /某作者的所有文章
 const articleFindAllweb = async ctx => {
-    
-    await modelsArticle.Articles.aggregate([
+    let{ page, author, title } = ctx.request.body;
+    //
+    if(page || page===''){ //分页查询 {page:1, author: xm }  //所有查询 {author: xm}
+        //判断页码
+        if(!page || isNaN(Number(page))){
+            page = 1
+        }else{
+            page = Number(page)
+        }
+        //每页条数
+        let pageSize = 5;
+        //计算总条数
+        let count = 0
+        await modelsArticle.Articles.find(ctx.request.body).count().then(rel=>{
+            count = rel
+        })
+        let totalPage = 0
+        if(count > 0){ //总页数等于总条数除以每页条数 向上取整
+            totalPage = Math.ceil(count / pageSize)
+        }
+        //判断当前页码的正确范围
+        if(totalPage > 0 && page > totalPage){
+            page = totalPage
+        }else if(page < 1){
+            page = 1
+        }
+
+        //计算起始位置
+        let start = (page - 1) * pageSize   //limit()跨越多少个元素
+        await modelsArticle.Articles.aggregate([
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "author",
+                    foreignField: "username",
+                    as: "user"
+                }
+            },
+            {$limit : pageSize},
+            {$skip : start},
+            {$sort: { "createTime" : -1}}
+
+        ],function(err,docs){
+            if(docs && docs.length > 0){
+                // console.log(JSON.stringify(docs))
+                ctx.body = {
+                    code: 200,
+                    msg: '文章查询成功',
+                    result: docs,
+                    page,
+                    pageSize,
+                    totalPage,
+                    count
+                }
+            }else {
+                console.log('erre',err)
+                ctx.body = {
+                    code: 300,
+                    msg: "查询错误或没有查询到文章",
+                    err: err
+                }
+            }
+        })
+
+    }else {
+        // await crud.Find(modelsArticle.Articles, ctx.request.body, ctx) //所有查询不分页
+    }
+
+}
+
+
+const articleFindOneweb = async ctx => {  
+    let {id} = ctx.request.body;
+    let isRead = false
+    let conditions = {
+        id: id
+    }
+    console.log(conditions)
+    let pipeLine = [
         {
             $lookup: {
                 from: "users",
                 localField: "author",
                 foreignField: "username",
-                as: "users"
-              }
-        }
-    ],function(err,docs){
+                as: "user"
+            }
+        },
+        { $match: conditions },
+    ]
+    await modelsArticle.Articles.aggregate(pipeLine, function(err,docs){
         if(docs && docs.length > 0){
             // console.log(JSON.stringify(docs))
+            isRead = true
             ctx.body = {
                 code: 200,
                 msg: '文章查询成功',
@@ -35,63 +115,8 @@ const articleFindAllweb = async ctx => {
         }
     })
 
-    // await modelsArticle.Articles.find()
-    // .then(rel => {
-    //     if(rel && rel.length > 0){
-    //         ctx.body = {
-    //             code: 200,
-    //             msg: '文章查询成功',
-    //             result: rel
-    //         }
-    //     }else {
-    //         ctx.body = {
-    //             code: 300,
-    //             msg: "查询错误或没有查询到文章"
-    //         }
-    //     }
-    // }).catch(err => {
-    //     ctx.body = {
-    //         code: 500,
-    //         msg: "文章查询异常",
-    //         err
-    //     }
-    // })
-
-}
-
-
-const articleFindOne = async ctx => {  
-    let keyword = ctx.request.body;
-    let isRead = false
-    console.log('keyword',keyword) 
-    // await crud.FindOne(modelsArticle.Articles, keyword, ctx)
-
-    await modelsArticle.Articles.findOne(keyword)//
-    .then((rel) => {
-        if (rel) {
-            isRead = true
-            ctx.body = {
-                code: 200,
-                msg: "查询成功",
-                reslut: rel, //返回对象
-            };
-        } else {
-            ctx.body = {
-                code: 300,
-                msg: "查询失败",
-            };
-        }
-    })
-    .catch((err) => {
-        ctx.body = {
-            code: 400,
-            msg: "查询异常",
-        };
-        console.error(err);
-    })
-
     if(isRead){
-        await modelsArticle.Articles.updateOne(keyword,{$inc:{read: 1}}) //$inc自增
+        await modelsArticle.Articles.updateOne(conditions,{$inc:{read: 1}}) //$inc自增
     } 
 }
 
@@ -176,5 +201,6 @@ const articleFindStemfrom = async ctx => {
 }
 
 module.exports = {
-    articleFindAllweb
+    articleFindAllweb,
+    articleFindOneweb
 }
