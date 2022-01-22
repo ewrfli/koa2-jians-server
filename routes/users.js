@@ -17,7 +17,7 @@ protectedUserRouter.post("/verify", jwtUtil.verifyJwtUtil); //验证是否登录
 
 protectedUserRouter.post("/add", userCtl.userAdd);
 
-protectedUserRouter.delete("/del", userCtl.userDel);
+protectedUserRouter.post("/del", userCtl.userDel);
 
 protectedUserRouter.put("/pwdupdate", userCtl.userUpdate); //修改用户名密码
 

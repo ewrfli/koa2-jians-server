@@ -4,7 +4,7 @@ const usersSchecma = new mongoose.Schema({
     username: String,
     pwd: {
         type: String,
-        select: false
+        // select: false
     },
     id: {
         type: String,

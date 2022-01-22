@@ -33,7 +33,8 @@ const userRegister = async ctx => {
 //添加用户
 const userAdd = async (ctx) => {
     let { username = "", pwd = "" } = ctx.request.body;
-    await crud.Add(modelsUsers.Users, { username, pwd }, ctx)
+    console.log('add', ctx.request.body)
+    await crud.Add(modelsUsers.Users, ctx.request.body, ctx)
 };
 
 
@@ -69,6 +70,9 @@ const userDataUpdate = async (ctx, next) => {
         { _id: params._id },
         {
             username: params.username, 
+            pwd: params.pwd,
+            power: params.power,
+            id: params.id,
             avatar: params.avatar, 
             sex: params.sex ,
             desc: params.desc ,
