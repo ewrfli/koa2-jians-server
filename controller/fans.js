@@ -52,18 +52,6 @@ const unfansFollow = async ctx => {
     })
 }
 
-const fansAdd = async ctx => {
-
-}
-
-const fansDel = async ctx => {
-
-}
-
-const fansUpdate = async ctx => {
-
-}
-
 
 const fansFindAll = async ctx => {
     let { page } = ctx.request.body;
@@ -134,16 +122,46 @@ const fansFindAll = async ctx => {
     }
 }
 
-const fansFindOne = async ctx => {
+// 点赞
+const StarFindOne = async ctx => {  
+    let keyword = ctx.request.body;
+    let isRead = false
+    console.log('keyword',keyword) 
+    // await crud.FindOne(modelsArticle.Articles, keyword, ctx)
 
+    await modelsArticle.Articles.findOne(keyword)//
+    .then((rel) => {
+        if (rel) {
+            isRead = true
+            ctx.body = {
+                code: 200,
+                msg: "查询成功",
+                reslut: rel, //返回对象
+            };
+        } else {
+            ctx.body = {
+                code: 300,
+                msg: "查询失败",
+            };
+        }
+    })
+    .catch((err) => {
+        ctx.body = {
+            code: 400,
+            msg: "查询异常",
+        };
+        console.error(err);
+    })
+
+    if(isRead){
+        await modelsArticle.Articles.updateOne(keyword,{$inc:{star: 1}}) //$inc自增
+    } 
 }
+
 
 module.exports = {
     fansFollow,
     unfansFollow,
-    fansAdd,
     fansFindAll,
-    fansFindOne,
-    fansDel,
-    fansUpdate
+    StarFindOne
 }

@@ -5,8 +5,26 @@ const crud = require('./crudUtil')
 // 添加评论
 const commentAdd = async ctx => {
     let {id = "",username="",articleAuthor="",articleTitle="",articleId="",commentContent="",commentCreateTime=""} = ctx.request.body;
+    //articleAuthor articleTitle 为空则=""
     if(!id){
         id = Date.now()
+    }
+    if(articleId && articleAuthor==""&&articleTitle=="") {
+        console.log('only articleId', articleId)
+        //根据articleId查文章 自动补全articleAuthor articleTitle
+        await modelsArticle.Articles.findOne({id:articleId})//
+        .then((rel) => {
+            if (rel) {
+                console.log('根据articleId查文章',rel)
+                articleAuthor = rel.author
+                articleTitle = rel.title
+            }else {
+                console.log('根据articleId查文章失败')
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+        })
     }
     await crud.Add(modelsComment.Comments, {id,username,articleAuthor,articleTitle,articleId,commentContent,commentCreateTime}, ctx)
 

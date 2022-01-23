@@ -6,7 +6,7 @@ const articleRouter = new Router({  //unprotected无保护的
 });
 
 articleRouter.post("/add", articleCtl.articleAdd);
-articleRouter.post("/findone", articleCtl.articleFindOne);
+articleRouter.post("/findone", articleCtl.articleFindOne); //阅读量+1
 articleRouter.post("/findall", articleCtl.articleFindAll);
 articleRouter.post("/del", articleCtl.articleDel);
 articleRouter.post("/update", articleCtl.articleUpdate);

@@ -108,7 +108,7 @@ const Update = (model, where, params, ctx) => (
  * @returns 
  */
 const Find = (model, where, ctx) => (
-    model.find(where)
+    model.find(where).sort('-id')
     .then(rel => {
         if (rel && rel.length > 0) {
             // console.log('crudFindrel',rel)
