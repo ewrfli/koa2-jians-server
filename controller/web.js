@@ -73,7 +73,7 @@ const articleFindAllweb = async ctx => {
         })
 
     }else {
-        // await crud.Find(modelsArticle.Articles, ctx.request.body, ctx) //所有查询不分页
+        await crud.Find(modelsArticle.Articles, ctx.request.body, ctx) //所有查询不分页
     }
 
 }

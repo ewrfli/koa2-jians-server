@@ -10,6 +10,7 @@ const cors = require('koa2-cors')
 const koajwt = require('koa-jwt')
 const mylogger = require('./controller/mylogger')
 const SIGN_KEY = 'jianshu-server-jwt'
+const log4js = require('./controller/log4js')
 //连接数据库
 MongoConnect()
 
@@ -34,6 +35,11 @@ app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
 //
+
+
+// log4js中间件
+app.use(logger())
+
 
 // 自定义请求日志记录logger中间件
 // app.use(mylogger())

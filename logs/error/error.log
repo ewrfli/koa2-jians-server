@@ -1,0 +1,14 @@
+[2022-01-24T16:11:27.980] [ERROR] error - {
+  method: 'OPTIONS',
+  url: '/users/login',
+  body: {},
+  user: undefined,
+  err: TypeError: Cannot read properties of undefined (reading 'success')
+      at formatRes (C:\Code\jians\koa2-jians-server\controller\log4js.js:42:56)
+      at Object.logger.resLogger (C:\Code\jians\koa2-jians-server\controller\log4js.js:62:24)
+      at C:\Code\jians\koa2-jians-server\app.js:46:10
+      at processTicksAndRejections (node:internal/process/task_queues:96:5)
+      at async serve (C:\Code\jians\koa2-jians-server\node_modules\koa-static\index.js:53:9)
+      at async logger (C:\Code\jians\koa2-jians-server\node_modules\koa-logger\index.js:67:7)
+      at async bodyParser (C:\Code\jians\koa2-jians-server\node_modules\koa-bodyparser\index.js:95:5)
+}
